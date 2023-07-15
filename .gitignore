@@ -1,1 +1,6 @@
+
+target/
+dbt_packages/
+logs/
 env/
+sethbox-da3a277fb16b.json
