@@ -22,3 +22,10 @@ snapshot-paths: ["snapshots"]
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
+
+# datadiff configs (need to update these with actual target names)
+vars:
+  data_diff:
+    prod_database: my_default_database # default database for the prod target
+    prod_schema: my_default_schema # default schema for the prod target
+    prod_custom_schema: PROD_<custom_schema> # Optional: see dropdown below
