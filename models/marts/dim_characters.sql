@@ -1,5 +1,7 @@
 {{
-    config(materialized='table')
+    config(
+        materialized='table'
+    )
 }}
 
 with characters as (

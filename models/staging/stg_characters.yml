@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_characters
+    description: ""
+    columns:
+      - name: character_id
+        description: ""
+        tags:
+          - primary-key
+
+      - name: character_name
+        description: ""
+
+      - name: character_description
+        description: ""
+
+      - name: loaded_at
+        description: ""
+

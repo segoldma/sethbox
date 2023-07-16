@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: dim_characters
+    description: ""
+    columns:
+      - name: character_id
+        description: ""
+        tags:
+          - primary-key
+
+      - name: character_name
+        description: ""
+
+      - name: personality_traits
+        description: ""
+
+      - name: episode_count
+        description: ""
+
