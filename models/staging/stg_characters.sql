@@ -7,5 +7,6 @@ select
   , name as character_name
   , description as character_description
   , current_timestamp() as loaded_at
+  , 100 as one_hundred
 
 from {{ ref('characters') }}

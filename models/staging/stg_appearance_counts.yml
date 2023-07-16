@@ -1,20 +1,15 @@
 version: 2
-
 models:
   - name: stg_appearance_counts
-    description: ""
     columns:
       - name: character_id
-        description: ""
+        description: ''
         tags:
           - primary-key
-
       - name: character_name
-        description: ""
-
+        description: ''
       - name: episode_count
-        description: ""
-
+        description: ''
       - name: loaded_at
-        description: ""
-
+        description: ''
+sources: []

@@ -28,3 +28,8 @@ vars:
   data_diff:
     prod_database: sethbox # default database for the prod target
     prod_schema: sethbox # default schema for the prod target
+
+# dbt-osmosis configs
+models:
+  sethbox:
+    +dbt-osmosis: "{model}.yml"

@@ -1,20 +1,17 @@
 version: 2
-
 models:
   - name: stg_characters
-    description: ""
     columns:
       - name: character_id
-        description: ""
+        description: ''
         tags:
           - primary-key
-
       - name: character_name
-        description: ""
-
+        description: ''
       - name: character_description
-        description: ""
-
+        description: ''
       - name: loaded_at
-        description: ""
-
+        description: ''
+      - name: one_hundred
+        description: ''
+sources: []
