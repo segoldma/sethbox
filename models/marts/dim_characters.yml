@@ -8,6 +8,14 @@ models:
           - primary-key
       - name: character_name
         description: ''
+      - name: character_description
+        description: ''
+      - name: loaded_at
+        description: ''
+      - name: one_hundred
+        description: ''
+      - name: two_hundred
+        description: ''
       - name: personality_traits
         description: ''
       - name: episode_count
