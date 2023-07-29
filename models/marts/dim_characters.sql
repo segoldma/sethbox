@@ -18,13 +18,15 @@ with characters as (
 
 , final as (
     select
-      characters.*
-      , personality_traits.personality_traits
-      , appearance_counts.episode_count
+        characters.*
+        , personality_traits.personality_traits
+        , appearance_counts.episode_count
 
     from characters
-    left join personality_traits using (character_id)
-    left join appearance_counts using (character_id)
+    left join personality_traits
+        on characters.character_id = personality_traits.character_id
+    left join appearance_counts
+        on (character_id)
 )
 
 select * from final
