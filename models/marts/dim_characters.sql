@@ -26,7 +26,7 @@ with characters as (
     left join personality_traits
         on characters.character_id = personality_traits.character_id
     left join appearance_counts
-        on (character_id)
+        on characters.character_id = appearance_counts.character_id
 )
 
 select * from final
