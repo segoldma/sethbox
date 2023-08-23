@@ -19,6 +19,7 @@ dbt-bigquery==1.5.3
 dbt-core==1.5.2
 dbt-extractor==0.4.1
 dbt-osmosis==0.11.21
+dbt-semantic-interfaces==0.2.0
 diff-cover==7.7.0
 dnspython==2.4.0
 dsnparse==0.1.15
