@@ -18,7 +18,9 @@ with characters as (
 
 , final as (
     select
-        characters.*
+        characters.character_id
+        , characters.character_name
+        , characters.character_description
         , personality_traits.personality_traits
         , appearance_counts.episode_count
 
