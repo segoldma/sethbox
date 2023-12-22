@@ -23,6 +23,7 @@ with characters as (
         , characters.character_description
         , personality_traits.personality_traits
         , appearance_counts.episode_count
+        , characters.loaded_at
 
     from characters
     left join personality_traits
