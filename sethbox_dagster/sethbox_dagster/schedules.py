@@ -9,7 +9,7 @@ schedules = [
     build_schedule_from_dbt_selection(
         [sethbox_dbt_assets],
         job_name="daily_dbt_models",
-        cron_schedule="@daily",
-        dbt_select="stg_characters",
-    ),
+        cron_schedule="@weekly",
+        dbt_select="*"
+    )
 ]
