@@ -1,0 +1,21 @@
+name: 'Close Stale Issues'
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 0' # midnight on sundays
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          stale-pr-message: 'This PR is stale because it has been open 28 days with no activity. Remove stale label or comment or this will be closed in 14 days.'
+          close-pr-message: 'This PR was closed because it has been stale for 14 days with no further activity.'
+
+          days-before-stale: 28
+          days-before-close: 14
