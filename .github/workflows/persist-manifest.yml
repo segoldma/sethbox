@@ -22,12 +22,34 @@ jobs:
 
     - name: Install dbt
       run: |
-        pip install dbt-core
+        pip install dbt-bigquery
+
+    - name: Set up environment variables
+      env:
+        CICD_DATASET: ${{ secrets.CICD_DATASET }}
+        CICD_SERVICE_ACCOUNT: /tmp/service_account.json
+        CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
+        CICD_PRIORITY: ${{ secrets.CICD_PRIORITY }}
+        CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
+      run: |
+        echo "${{ secrets.CICD_SERVICE_ACCOUNT }}" > /tmp/service_account.json
+
+    - name: Create dbt profiles directory
+      run: mkdir -p ~/.dbt
+
+    - name: Copy profiles.yml to dbt directory
+      run: cp .ci/profiles.yml ~/.dbt/profiles.yml
 
     - name: Run dbt to generate manifest
+      env:
+        CICD_DATASET: ${{ secrets.CICD_DATASET }}
+        CICD_SERVICE_ACCOUNT: /tmp/service_account.json
+        CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
+        CICD_PRIORITY: ${{ secrets.CICD_PRIORITY }}
+        CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
       run: |
-        dbt deps
-        dbt compile
+        dbt deps --profiles-dir ~/.dbt
+        dbt compile --profiles-dir ~/.dbt
 
     - name: Checkout manifests branch
       run: |
