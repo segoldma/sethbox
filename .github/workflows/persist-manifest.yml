@@ -25,18 +25,13 @@ jobs:
         pip install dbt-bigquery
 
     - name: Set up environment variables and write service account key
+      run: |
+        echo "${{ secrets.CICD_SERVICE_ACCOUNT }}" > /tmp/service_account.json
       env:
         CICD_DATASET: ${{ secrets.CICD_DATASET }}
         CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
         CICD_PRIORITY: ${{ secrets.CICD_PRIORITY }}
         CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
-      run: |
-        echo "${{ secrets.CICD_SERVICE_ACCOUNT }}" > /tmp/service_account.json
-        echo "Dataset: $CICD_DATASET"
-        echo "Keyfile: /tmp/service_account.json"
-        echo "Location: $CICD_LOCATION"
-        echo "Priority: $CICD_PRIORITY"
-        echo "Project: $CICD_PROJECT"
 
     - name: Create dbt profiles directory
       run: mkdir -p ~/.dbt
