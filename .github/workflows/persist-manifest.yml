@@ -25,29 +25,31 @@ jobs:
         pip install dbt-bigquery
 
     - name: Set up environment variables and write service account key
-      run: |
-        printf "%s" "${{ secrets.CICD_SERVICE_ACCOUNT }}" > /tmp/service_account.json
       env:
-        CICD_DATASET: ${{ secrets.CICD_DATASET }}
-        CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
-        CICD_PRIORITY: ${{ secrets.CICD_PRIORITY }}
-        CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
+        CICD_SERVICE_ACCOUNT: ${{ secrets.CICD_SERVICE_ACCOUNT }}
+      run: |
+        printf "%s" "${CICD_SERVICE_ACCOUNT}" > /tmp/service_account.json
 
     - name: Create dbt profiles directory
       run: mkdir -p ~/.dbt
 
     - name: Generate profiles.yml
+      env:
+        CICD_DATASET: ${{ secrets.CICD_DATASET }}
+        CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
+        CICD_PRIORITY: ${{ secrets.CICD_PRIORITY }}
+        CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
       run: |
         cat <<EOF > ~/.dbt/profiles.yml
         sethbox:
           target: ci
           outputs:
             ci:
-              dataset: "${CICD_DATASET}"
+              dataset: "$CICD_DATASET"
               keyfile: "/tmp/service_account.json"
-              location: "${CICD_LOCATION}"
-              priority: "${CICD_PRIORITY}"
-              project: "${CICD_PROJECT}"
+              location: "$CICD_LOCATION"
+              priority: "$CICD_PRIORITY"
+              project: "$CICD_PROJECT"
               type: bigquery
               method: service-account
               job_execution_timeout_seconds: 300
@@ -60,12 +62,6 @@ jobs:
         cat ~/.dbt/profiles.yml
 
     - name: Run dbt to generate manifest
-      env:
-        CICD_DATASET: ${{ secrets.CICD_DATASET }}
-        CICD_SERVICE_ACCOUNT: /tmp/service_account.json
-        CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
-        CICD_PRIORITY: ${{ secrets.CICD_PRIORITY }}
-        CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
       run: |
         dbt deps --profiles-dir ~/.dbt
         dbt compile --profiles-dir ~/.dbt
