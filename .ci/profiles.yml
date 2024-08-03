@@ -2,11 +2,11 @@ sethbox:
   target: ci
   outputs:
     ci:
-      dataset: "{{ env_var('CICD_DATASET') }}"
-      keyfile:  "{{ env_var('CICD_SERVICE_ACCOUNT') }}"
-      location: "{{ env_var('CICD_LOCATION') }}"
-      priority: "{{ env_var('CICD_PRIORITY') }}"
-      project: "{{ env_var('CICD_PROJECT') }}"
+      dataset: {{ env_var('CICD_DATASET') }}
+      keyfile:  {{ env_var('CICD_SERVICE_ACCOUNT') }}
+      location: {{ env_var('CICD_LOCATION') }}
+      priority: {{ env_var('CICD_PRIORITY') }}
+      project: {{ env_var('CICD_PROJECT') }}
       type: bigquery
       method: service-account
       job_execution_timeout_seconds: 300
