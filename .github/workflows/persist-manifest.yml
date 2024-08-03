@@ -1,0 +1,49 @@
+name: Persist dbt Manifest
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  persist_manifest:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout main branch
+      uses: actions/checkout@v2
+      with:
+        ref: main
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+
+    - name: Install dbt
+      run: |
+        pip install dbt-core
+
+    - name: Run dbt to generate manifest
+      run: |
+        dbt deps
+        dbt compile
+
+    - name: Checkout manifests branch
+      run: |
+        git fetch origin
+        git checkout -b manifests origin/manifests || git checkout manifests
+
+    - name: Copy new manifest
+      run: |
+        cp target/manifest.json manifests/previous_manifest.json
+
+    - name: Commit and push changes
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add manifests/previous_manifest.json
+        git commit -m "Update previous manifest"
+        git push origin manifests
