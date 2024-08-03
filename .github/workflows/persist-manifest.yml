@@ -69,7 +69,15 @@ jobs:
     - name: Checkout manifests branch
       run: |
         git fetch origin
-        git checkout -b manifests origin/manifests || git checkout manifests
+        if git branch -a | grep 'remotes/origin/manifests'; then
+          git checkout manifests
+        else
+          git checkout -b manifests
+        fi
+
+    - name: Create manifests directory
+      run: |
+        mkdir -p manifests
 
     - name: Copy new manifest
       run: |
