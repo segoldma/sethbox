@@ -26,7 +26,7 @@ jobs:
 
     - name: Set up environment variables and write service account key
       run: |
-        echo "${{ secrets.CICD_SERVICE_ACCOUNT }}" > /tmp/service_account.json
+        printf "%s" "${{ secrets.CICD_SERVICE_ACCOUNT }}" > /tmp/service_account.json
       env:
         CICD_DATASET: ${{ secrets.CICD_DATASET }}
         CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
@@ -54,6 +54,10 @@ jobs:
               job_retries: 1
               threads: 16
         EOF
+
+    - name: Display profiles.yml for debugging
+      run: |
+        cat ~/.dbt/profiles.yml
 
     - name: Run dbt to generate manifest
       env:
