@@ -23,7 +23,8 @@ with characters as (
         , characters.character_description
         , personality_traits.personality_traits
         , appearance_counts.episode_count
-        , characters.loaded_at::date as loaded_at
+        , characters.loaded_at
+        , 1 as numb
 
     from characters
     left join personality_traits

@@ -1,5 +1,4 @@
 import json
-import jsondiff
 from collections import defaultdict
 
 def load_json(filepath):
@@ -12,27 +11,19 @@ def get_models(manifest):
 def compare_models(current_models, previous_models):
     added_models = []
     removed_models = []
-    modified_models = defaultdict(lambda: {'added_columns': [], 'removed_columns': [], 'modified_columns': []})
+    modified_models = []
 
     # Identify added and modified models
     for model_name, model_data in current_models.items():
         if model_name not in previous_models:
             added_models.append(model_name)
         else:
-            # Compare columns
-            current_columns = model_data.get('columns', {})
-            previous_columns = previous_models[model_name].get('columns', {})
+            # Compare checksums to identify modified models
+            current_checksum = model_data.get('checksum', {}).get('checksum')
+            previous_checksum = previous_models[model_name].get('checksum', {}).get('checksum')
 
-            # Find added, removed, and modified columns
-            for column_name, column_data in current_columns.items():
-                if column_name not in previous_columns:
-                    modified_models[model_name]['added_columns'].append(column_name)
-                elif current_columns[column_name]['data_type'] != previous_columns[column_name]['data_type']:
-                    modified_models[model_name]['modified_columns'].append(column_name)
-
-            for column_name in previous_columns:
-                if column_name not in current_columns:
-                    modified_models[model_name]['removed_columns'].append(column_name)
+            if current_checksum != previous_checksum:
+                modified_models.append(model_name)
 
     # Identify removed models
     for model_name in previous_models:
@@ -54,17 +45,7 @@ def generate_summary(added_models, removed_models, modified_models):
 
     if modified_models:
         summary.append("\n### Modified Models")
-        for model, changes in modified_models.items():
-            summary.append(f"- {model}")
-            if changes['added_columns']:
-                summary.append("  - **Added Columns**:")
-                summary.extend(f"    - {column}" for column in changes['added_columns'])
-            if changes['removed_columns']:
-                summary.append("  - **Removed Columns**:")
-                summary.extend(f"    - {column}" for column in changes['removed_columns'])
-            if changes['modified_columns']:
-                summary.append("  - **Modified Columns**:")
-                summary.extend(f"    - {column}" for column in changes['modified_columns'])
+        summary.extend(f"- {model}" for model in modified_models)
 
     return "\n".join(summary)
 
