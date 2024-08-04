@@ -46,7 +46,7 @@ jobs:
           CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
         run: |
           cat <<EOF > ~/.dbt/profiles.yml
-          my_dbt_project:
+          sethbox:
             target: ci
             outputs:
               ci:
