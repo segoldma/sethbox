@@ -1,4 +1,4 @@
-name: Persist dbt Manifest
+name: Persist dbt Artifacts
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write  # Explicitly grant write permissions to the GITHUB_TOKEN
 
 jobs:
-  persist_manifest:
+  persist_artifacts:
     runs-on: ubuntu-latest
 
     steps:
@@ -65,28 +65,28 @@ jobs:
       run: |
         cat ~/.dbt/profiles.yml
 
-    - name: Run dbt to generate manifest
+    - name: Run dbt to generate artifacts
       run: |
         dbt deps --profiles-dir ~/.dbt
         dbt compile --profiles-dir ~/.dbt
 
-    - name: Checkout manifests branch
+    - name: Checkout artifacts branch
       run: |
         git fetch origin
-        if git branch -a | grep 'remotes/origin/manifests'; then
-          git checkout manifests
+        if git branch -a | grep 'remotes/origin/artifacts'; then
+          git checkout artifacts
           git merge origin/main --no-edit || true
         else
-          git checkout -b manifests
+          git checkout -b artifacts
         fi
 
-    - name: Create manifests directory
+    - name: Create artifacts directory
       run: |
-        mkdir -p manifests
+        mkdir -p artifacts
 
-    - name: Copy new manifest
+    - name: Copy new artifacts
       run: |
-        cp target/manifest.json manifests/previous_manifest.json
+        cp target/manifest.json artifacts/previous_manifest.json
 
     - name: Commit and push changes
       env:
@@ -94,6 +94,6 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add manifests/previous_manifest.json
-        git commit -m "Update previous manifest"
-        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git manifests
+        git add artifacts/previous_manifest.json
+        git commit -m "Update artifacts"
+        git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git artifacts
