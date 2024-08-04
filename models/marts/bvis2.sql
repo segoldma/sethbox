@@ -1,1 +1,1 @@
-select 1 as col
+select * from {{ ref('dim_characters') }}
