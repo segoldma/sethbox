@@ -24,7 +24,6 @@ with characters as (
         , personality_traits.personality_traits
         , appearance_counts.episode_count
         , characters.loaded_at
-        , 1 as numb
 
     from characters
     left join personality_traits
