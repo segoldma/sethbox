@@ -1,0 +1,91 @@
+name: Compare Manifests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR Branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      
+      - name: Checkout Artifacts Branch
+        uses: actions/checkout@v3
+        with:
+          ref: artifacts
+          path: artifacts
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.x
+
+      - name: Install dbt
+        run: |
+          pip install dbt-bigquery
+
+      - name: Set up environment variables and write service account key
+        env:
+          CICD_SERVICE_ACCOUNT: ${{ secrets.CICD_SERVICE_ACCOUNT }}
+        run: |
+          printf "%s" "${CICD_SERVICE_ACCOUNT}" > /tmp/service_account.json
+
+      - name: Create dbt profiles directory
+        run: mkdir -p ~/.dbt
+
+      - name: Generate profiles.yml
+        env:
+          CICD_DATASET: ${{ secrets.CICD_DATASET }}
+          CICD_LOCATION: ${{ secrets.CICD_LOCATION }}
+          CICD_PRIORITY: ${{ secrets.CICD_PRIORITY }}
+          CICD_PROJECT: ${{ secrets.CICD_PROJECT }}
+        run: |
+          cat <<EOF > ~/.dbt/profiles.yml
+          my_dbt_project:
+            target: ci
+            outputs:
+              ci:
+                dataset: "$CICD_DATASET"
+                keyfile: "/tmp/service_account.json"
+                location: "$CICD_LOCATION"
+                priority: "$CICD_PRIORITY"
+                project: "$CICD_PROJECT"
+                type: bigquery
+                method: service-account
+                job_execution_timeout_seconds: 300
+                job_retries: 1
+                threads: 16
+          EOF
+
+      - name: Display profiles.yml for debugging
+        run: |
+          cat ~/.dbt/profiles.yml
+
+      - name: Run dbt to generate artifacts
+        run: |
+          dbt deps --profiles-dir ~/.dbt
+          dbt compile --profiles-dir ~/.dbt
+
+      - name: Install Comparison Dependencies
+        run: pip install jsondiff
+
+      - name: Compare Manifests
+        run: python .github/workflows/compare_manifests.py
+
+      - name: Post Comment
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const summary = fs.readFileSync('./summary.md', 'utf8');
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: summary
+            })
