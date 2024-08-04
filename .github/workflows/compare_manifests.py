@@ -60,8 +60,11 @@ def main():
 
     summary = generate_summary(added_models, removed_models, modified_models)
 
-    with open('summary.md', 'w') as file:
-        file.write(summary)
+    if summary:
+        with open('summary.md', 'w') as file:
+            file.write(summary)
+
+    return bool(summary)  # Return True if there are changes, False otherwise
 
 if __name__ == "__main__":
     main()

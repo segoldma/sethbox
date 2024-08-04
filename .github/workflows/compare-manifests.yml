@@ -75,9 +75,12 @@ jobs:
         run: pip install jsondiff
 
       - name: Compare Manifests
-        run: python .github/workflows/compare_manifests.py
+        id: compare
+        run: |
+          python .github/workflows/compare_manifests.py
 
       - name: Post Comment
+        if: steps.compare.outputs.has_changes == 'true'
         uses: actions/github-script@v6
         with:
           script: |
