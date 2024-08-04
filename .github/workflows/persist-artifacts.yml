@@ -69,6 +69,7 @@ jobs:
       run: |
         dbt deps --profiles-dir ~/.dbt
         dbt compile --profiles-dir ~/.dbt
+        dbt docs generate --profiles-dir ~/.dbt
 
     - name: Checkout artifacts branch
       run: |
@@ -86,7 +87,8 @@ jobs:
 
     - name: Copy new artifacts
       run: |
-        cp target/manifest.json artifacts/previous_manifest.json
+        cp target/manifest.json artifacts/manifest.json
+        cp target/catalog.json artifacts/catalog.json
 
     - name: Commit and push changes
       env:
@@ -94,6 +96,6 @@ jobs:
       run: |
         git config --global user.name "GitHub Actions"
         git config --global user.email "actions@github.com"
-        git add artifacts/previous_manifest.json
+        git add artifacts/manifest.json artifacts/catalog.json
         git commit -m "Update artifacts"
         git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git artifacts
