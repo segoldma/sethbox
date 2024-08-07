@@ -9,5 +9,6 @@ select
     , current_timestamp() as loaded_at
     , 100 as one_hundred
     , 200 as two_hundred
+    , 300 as three_hundred
 
 from {{ ref('characters') }}
