@@ -25,6 +25,7 @@ with characters as (
         , appearance_counts.episode_count
         , characters.loaded_at
         , 2 as col2
+        , 'foo' as bar
 
     from characters
     left join personality_traits
