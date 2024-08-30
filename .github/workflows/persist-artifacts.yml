@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write  # Explicitly grant write permissions to the GITHUB_TOKEN
 
+concurrency:
+  group: dbt-artifacts-${{ github.ref }}
+  cancel-in-progress: true  # Cancel in-progress runs for the same group
+
 jobs:
   persist_artifacts:
     runs-on: ubuntu-latest
