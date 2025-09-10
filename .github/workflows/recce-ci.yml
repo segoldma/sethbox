@@ -20,7 +20,7 @@ jobs:
   
       - name: Install dependencies
         run: |
-          pip install dbt-bigquery
+          pip install dbt-bigquery==1.9.0
           pip install recce
       
       # Checkout artifacts branch and copy files
