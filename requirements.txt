@@ -65,7 +65,7 @@ networkx==3.3
 numpy==2.0.1
 ordered-set==4.1.0
 packaging==24.1
-pandas==2.2.2
+pandas==2.2.3
 parsedatetime==2.6
 pathspec==0.12.1
 portalocker==2.10.1
@@ -88,7 +88,7 @@ python-multipart==0.0.9
 python-slugify==8.0.4
 pytimeparse==1.1.8
 pytz==2024.1
-PyYAML==6.0.1
+PyYAML==6.0.2
 recce==0.27.0
 referencing==0.35.1
 requests==2.32.3
