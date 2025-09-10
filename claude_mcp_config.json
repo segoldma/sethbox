@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "dbt-mcp": {
+      "command": "uvx",
+      "args": [
+        "--env-file",
+        "/Users/seth/Documents/sethbox/.env",
+        "dbt-mcp"
+      ]
+    }
+  }
+}
