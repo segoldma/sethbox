@@ -30,7 +30,7 @@ jobs:
 
     - name: Install dbt
       run: |
-        pip install dbt-bigquery==1.9.0
+        pip install dbt-bigquery
 
     - name: Set up environment variables and write service account key
       env:
